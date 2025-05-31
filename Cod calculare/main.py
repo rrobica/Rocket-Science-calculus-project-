@@ -41,21 +41,36 @@ plt.show()
 # ---------------------
 # GRAFIC 2: Masa totală minimă în funcție de m3 (pentru v_target)
 # ---------------------
-m3_vals = np.linspace(500, 5000, 50)
+m3_vals = np.linspace(500, 10000, 50)
 m_total_vals = []
 
 for m3 in m3_vals:
     min_mass = np.inf
     found = False
-    for m1 in np.linspace(500, 5000, 30):
-        for m2 in np.linspace(500, 5000, 30):
+    for m1 in np.linspace(500, 10000, 40):
+        for m2 in np.linspace(500, 10000, 40):
             v = compute_velocity(m1, m2, m3)
-            if abs(v - v_target) < 100:  # toleranță de 100 m/s
+            if abs(v - v_target) < 200:  # toleranță de 100 m/s
                 total_mass = k * (m1 + m2 + m3) + P
                 if total_mass < min_mass:
                     min_mass = total_mass
                     found = True
     m_total_vals.append(min_mass if found else np.nan)
+"""
+best_diff = np.inf
+best_total = np.nan
+
+for m3 in m3_vals:
+    for m1 in np.linspace(500, 10000, 40):
+        for m2 in np.linspace(500, 10000, 40):
+            v = compute_velocity(m1, m2, m3)
+            diff = abs(v - v_target)
+            total_mass = k * (m1 + m2 + m3) + P
+            if diff < best_diff:
+                best_diff = diff
+                best_total = total_mass
+    m_total_vals.append(best_total)
+"""
 
 plt.figure(figsize=(10, 6))
 plt.plot(m3_vals, m_total_vals, marker='o')
